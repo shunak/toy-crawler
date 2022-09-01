@@ -10,6 +10,7 @@ pub fn main() -> eyre::Result<Vec<String>> {
     let body = response.text()?;
     let doc = Document::from(body.as_str());
     let mut json: Vec<String> = vec![];
+    let offset: u32 = 33;
 
     // let url: &str = "";
     let mut idx: u32 = 0;
@@ -38,12 +39,15 @@ pub fn main() -> eyre::Result<Vec<String>> {
 
                 let doc2 = Document::from(reqwest::blocking::get(url.clone())?.text()?.as_str());
 
+                let id = idx - offset;
                 for title in doc2.find(Name("h1")).filter_map(|b| b.first_child()){
 
-                        println!("No:{} {:?} {}",idx, title.html().replace("\u{3000}"," ").replace("&nbsp;",""), url.clone());
-                        json.push(idx.to_string());
-                        json.push(title.html().replace("\u{3000}"," ").replace("&nbsp;",""));
-                        json.push(String::from(url.clone()));
+                        println!("ID:{} {:?} {}",id, title.html().replace("\u{3000}"," ").replace("&nbsp;",""), url.clone());
+
+                        // Construct JSON format.
+                        let json_cnt1 = String::from("id") + &id.to_string() + ":{article title:" + &title.html().replace("\u{3000}"," ").replace("&nbsp;","").to_string() + ",url:" + &url.clone().to_string() + "}";
+
+                        json.push(json_cnt1);
 
                 }
 
