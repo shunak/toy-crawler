@@ -1,0 +1,7 @@
+#!/bin/zsh
+cargo run > output_tmp.json
+cat output_tmp.json | sed -e s'#\\##g' | sed -e 's/\"{/{/g' | sed -e 's/}\"/}/g' > output3.json
+# cat output_tmp.json | sed -e s'#\\##g' | sed -e 's/^\"//' | sed -e 's/\"$//' > output3.json
+gsutil cp /Users/syu/toy-crawler/src/output3.json gs://testhosting202209
+gsutil setmeta -h "Cache-Control: public, no-store" gs://testhosting202209/output3.json
+rm output_tmp.json

@@ -1,14 +1,7 @@
 use select::document::Document;
 use select::predicate::Name;
 use url::{Url,ParseError};
-use serde::Serialize;
 
-#[derive(Serialize,Debug)]
-pub struct Article{
-    pub id: u32,
-    pub topic: String,
-    pub url: String,
-}
 
 pub fn main() -> eyre::Result<Vec<String>> {
 
@@ -19,14 +12,13 @@ pub fn main() -> eyre::Result<Vec<String>> {
     let mut json: Vec<String> = vec![];
     let offset_from: u32 = 33;
     let offset_to: u32 = 54;
-    let mut content: String = "".to_string();
+    let mut json_cnt1: String = "".to_string();
 
     // let url: &str = "";
     let mut idx: u32 = 0;
     // println!("{:?}", doc);
     // for href in doc.find(Name("a")){
     // for href in doc.find(Name("h1")).filter_map(|a| a.first_child()){
-
     for href in doc.find(Name("a")).filter_map(|a| a.attr("href")){
         // println!("{:?}", href);
         // println!("{:?}", Url::parse(href));
@@ -53,18 +45,27 @@ pub fn main() -> eyre::Result<Vec<String>> {
 
                 for title in doc2.find(Name("h1")).filter_map(|b| b.first_child()){
 
-                     // println!("ID:{} {:?} {}",id, title.html().replace("\u{3000}"," ").replace("&nbsp;",""), url.clone());
+                        // println!("ID:{} {:?} {}",id, title.html().replace("\u{3000}"," ").replace("&nbsp;",""), url.clone());
 
-                     // Construct JSON format.
-                    let data = Article {
-                        id: id,
-                        topic: title.html().replace("\u{3000}"," ").replace("&nbsp;",""),
-                        url: url.clone().to_string(),
-                    };
+                       // Construct JSON format.
+                        if id == 1 {
 
-                    content = serde_json::to_string(&data).unwrap();
+                        json_cnt1 = String::from("\"articles\":[").replace("\\","") + "{\"id\":" + &id.to_string() + ",\"article title\":\"" +  &title.html().replace("\u{3000}"," ").replace("&nbsp;","").replace("\u{200b}","") + "\",\"url\":\"" + &url.clone().to_string() + "\"}";
 
-                    json.push(content);
+                        } else if 2 <= id  && id <= 19{
+
+                        json_cnt1 = String::from("{\"id\":")+ &id.to_string() + ",\"article title\":\"" +  &title.html().replace("\u{3000}"," ").replace("&nbsp;","").replace("\u{200b}","") + "\",\"url\":\"" + &url.clone().to_string() + "\"}";
+
+                        }else{
+
+                        json_cnt1 = String::from("{\"id\":")+ &id.to_string() + ",\"article title\":\"" +  &title.html().replace("\u{3000}"," ").replace("&nbsp;","").replace("\u{200b}","") + "\",\"url\":\"" + &url.clone().to_string() + "\"}]";
+
+                        }
+
+
+                       // let json_cnt1 = String::from("id")  + &id.to_string() + ":{\"article title\":\"" +  &title.html().replace("\u{3000}"," ").replace("&nbsp;","").replace("\\"," ").to_string() + "\",\"url\":\"" + &url.clone().to_string() + "\"}";
+
+                        json.push(json_cnt1.replace("\\"," "));
 
                 }
 
@@ -74,12 +75,15 @@ pub fn main() -> eyre::Result<Vec<String>> {
 
         }
 
+        // return json;
+
+
 
     }
 
-    Ok(json)
     // println!("body = {:?}", body);
-    // Ok(content)
+
+    Ok(json)
     // Ok(())
 }
 
