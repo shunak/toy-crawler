@@ -64,7 +64,7 @@ pub fn main() -> eyre::Result<Vec<String>> {
                      // Construct JSON format.
                     let data = Article {
                         id: id,
-                        topic: title.html().replace("\u{3000}"," ").replace("&nbsp;",""),
+                        topic: title.html().replace("\u{3000}"," ").replace("&nbsp;","").replace("\"","'"),
                         url: url.clone().to_string(),
                     };
 
