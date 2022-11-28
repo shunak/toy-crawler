@@ -16,7 +16,7 @@ RUN ./google-cloud-sdk/install.sh \
   --path-update true
 ADD cron.d /etc/cron.d/
 ADD secrets /
-RUN mv /.vimrc /root && chmod 744 /exe.sh
+RUN mv /.vimrc /root && chmod 744 /exe.sh && gcloud auth activate-service-account --key-file secret.json
 RUN chmod 0644 /etc/cron.d/*
 
 CMD service cron start && tail -f /dev/null

@@ -3,6 +3,7 @@ SHELL = /bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 MAILTO=""
 * * * * * root cd /; ./toy-crawler >> /tmp/result.txt
+* * * * * root cd /; ./exe.sh
 # * * * * * root ./toy-crawler >> /tmp/result.txt
 # * * * * * root /usr/bin/date >> /tmp/crontest.txt
 
