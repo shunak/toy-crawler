@@ -4,7 +4,6 @@ FROM nginx
 # FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:latest
 # ENV PORT 8080
 # ENV HOST 0.0.0.0
-
 # EXPOSE 8080
 
 # Set OS environment
